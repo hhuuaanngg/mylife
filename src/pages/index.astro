@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostFeed from '../components/PostFeed.astro';
+import { getPosts } from '../lib/posts';
+import { site } from '../lib/site';
+
+const posts = await getPosts();
+---
+
+<BaseLayout current="home">
+	<main class="wrap">
+		<div class="page-kicker">
+			<h1>{site.name}</h1>
+			<p>{site.tagline}</p>
+		</div>
+		<PostFeed posts={posts} />
+	</main>
+</BaseLayout>

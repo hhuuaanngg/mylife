@@ -1,0 +1,30 @@
+---
+import { site } from '../lib/site';
+
+interface Props {
+	current?: 'home' | 'tags' | 'about';
+}
+
+const { current = 'home' } = Astro.props;
+---
+
+<header class="site-header">
+	<a class="brand" href="/">
+		<span class="brand-mark">{site.name}</span>
+		<span class="brand-en">mylife</span>
+	</a>
+	<nav class="nav" aria-label="站点">
+		<a href="/" aria-current={current === 'home' ? 'page' : undefined}>此刻</a>
+		<a href="/tags" aria-current={current === 'tags' ? 'page' : undefined}>标签</a>
+		<a href="/about" aria-current={current === 'about' ? 'page' : undefined}>关于</a>
+	</nav>
+	<div class="header-tools">
+		<div class="layout-switch" role="group" aria-label="照片排布">
+			<button type="button" data-layout-btn="grid" aria-pressed="false">九宫格</button>
+			<button type="button" data-layout-btn="waterfall" aria-pressed="true">大图</button>
+		</div>
+		<a class="avatar" href="/about" aria-label="关于">
+			<img src="/avatar.svg" alt="" width="28" height="28" />
+		</a>
+	</div>
+</header>

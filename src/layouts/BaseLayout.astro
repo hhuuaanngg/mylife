@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import { site } from '../lib/site';
+import SiteHeader from '../components/SiteHeader.astro';
+import Lightbox from '../components/Lightbox.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	current?: 'home' | 'tags' | 'about';
+}
+
+const { title, description = site.description, current = 'home' } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+---
+
+<!doctype html>
+<html lang="zh-CN" data-photo-layout="waterfall">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@600&display=swap"
+			rel="stylesheet"
+		/>
+		<script is:inline>
+			document.documentElement.dataset.photoLayout =
+				localStorage.getItem('cike-photo-layout') === 'grid' ? 'grid' : 'waterfall';
+		</script>
+	</head>
+	<body>
+		<SiteHeader current={current} />
+		<slot />
+		<footer class="site-footer">把日子留下来</footer>
+		<Lightbox />
+		<script src="../scripts/app.ts"></script>
+	</body>
+</html>

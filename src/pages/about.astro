@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout title="关于" description={site.tagline} current="about">
+	<main class="wrap about">
+		<div class="about-avatar">
+			<img src="/avatar.svg" alt="" width="84" height="84" />
+		</div>
+		<h1>{site.name}</h1>
+		<p class="bio">{site.tagline} 这里以后会换成你的名字和介绍。</p>
+		<div class="about-links">
+			{site.links.map((link) => (
+				<a href={link.href}>{link.label}</a>
+			))}
+		</div>
+	</main>
+</BaseLayout>

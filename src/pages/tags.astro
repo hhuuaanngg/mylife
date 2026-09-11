@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllTags } from '../lib/posts';
+
+const tags = await getAllTags();
+const max = Math.max(...tags.map((t) => t.count), 1);
+---
+
+<BaseLayout title="标签" current="tags">
+	<main class="wrap">
+		<div class="page-kicker">
+			<h1>标签</h1>
+			<p>从碎片里找同类</p>
+		</div>
+		<div class="tag-cloud">
+			{
+				tags.map(({ tag, count }) => (
+					<a
+						class="tag-chip"
+						href={`/t/${encodeURIComponent(tag)}`}
+						style={`font-size: ${14 + (count / max) * 10}px`}
+					>
+						<span class="name">#{tag}</span>
+						<span class="count">{count}</span>
+					</a>
+				))
+			}
+		</div>
+	</main>
+</BaseLayout>

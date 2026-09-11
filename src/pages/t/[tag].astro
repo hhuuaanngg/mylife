@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostFeed from '../../components/PostFeed.astro';
+import { getAllTags, getPostsByTag } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	const tags = await getAllTags();
+	return tags.map(({ tag }) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const posts = await getPostsByTag(tag!);
+---
+
+<BaseLayout title={`#${tag}`} current="tags">
+	<main class="wrap">
+		<div class="page-kicker">
+			<h1>#{tag}</h1>
+			<p>{posts.length} 条</p>
+		</div>
+		<PostFeed posts={posts} />
+	</main>
+</BaseLayout>
