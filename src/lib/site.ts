@@ -1,17 +1,16 @@
 export const site = {
-	name: '此刻',
-	tagline: '把日子拍下来，再写一句。',
-	description: '一个年轻向的生活轻博客，照片为主，文案很短。',
-	author: '此刻',
-	links: [
-		{ label: '微博', href: '#' },
-		{ label: 'Instagram', href: '#' },
-		{ label: '邮箱', href: 'mailto:hello@example.com' },
-	],
+	name: 'MEMORE',
+	english: 'COOL',
+	tagline: '保暖且酷。',
+	description: '技术、摄影与生活的个人记忆。ME MORE COOL。',
+	author: '黄先森',
+	footer: '愿我们都能在复杂世界里，保暖且酷。',
+	links: [{ label: 'memore.cool', href: 'https://memore.cool' }],
 };
 
 export function formatDate(date: Date) {
+	const year = date.getFullYear();
 	const month = date.getMonth() + 1;
 	const day = date.getDate();
-	return `${month}月${day}日`;
+	return `${year}年${month}月${day}日`;
 }

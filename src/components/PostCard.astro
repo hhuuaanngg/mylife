@@ -32,7 +32,15 @@ const extra = photos.length - 9;
 			</div>
 		)
 	}
+	{
+		post.data.video && (
+			<video class="post-video" controls preload="metadata" src={post.data.video}>
+				<a href={post.data.video}>播放视频</a>
+			</video>
+		)
+	}
 	<div class="post-body">
+		<h2 class="post-title">{title}</h2>
 		<div class="post-text" data-expand>
 			<slot />
 		</div>

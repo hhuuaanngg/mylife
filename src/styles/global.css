@@ -88,9 +88,9 @@ button {
 
 .brand-mark {
 	font-family: var(--serif);
-	font-size: 22px;
+	font-size: 20px;
 	font-weight: 600;
-	letter-spacing: 0.18em;
+	letter-spacing: 0.12em;
 	line-height: 1;
 }
 
@@ -340,8 +340,24 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 	letter-spacing: 0.04em;
 }
 
+.post-video {
+	display: block;
+	width: 100%;
+	max-height: 520px;
+	background: #161513;
+}
+
 .post-body {
 	padding: 12px 14px 10px;
+}
+
+.post-title {
+	margin: 0 0 8px;
+	font-family: var(--serif);
+	font-size: 17px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	line-height: 1.35;
 }
 
 .post-text {
@@ -360,12 +376,45 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 	overflow: visible;
 }
 
-.post-text :where(p) {
+.post-text :where(p, h2, h3, ul, ol, pre, blockquote) {
 	margin: 0 0 0.7em;
 }
 
-.post-text :where(p:last-child) {
+.post-text :where(p:last-child, h2:last-child, h3:last-child, ul:last-child, ol:last-child, pre:last-child, blockquote:last-child) {
 	margin-bottom: 0;
+}
+
+.post-text :where(h2, h3) {
+	font-family: var(--serif);
+	font-size: 1.05em;
+	letter-spacing: 0.02em;
+}
+
+.post-text :where(a) {
+	color: var(--teal);
+	text-underline-offset: 2px;
+}
+
+.post-text :where(ul, ol) {
+	padding-left: 1.2em;
+}
+
+.post-text :where(pre, code) {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 12.5px;
+}
+
+.post-text :where(pre) {
+	overflow: auto;
+	padding: 10px 12px;
+	border-radius: 6px;
+	background: #f4f0e8;
+}
+
+.post-text :where(blockquote) {
+	padding-left: 12px;
+	border-left: 2px solid var(--teal);
+	color: var(--muted);
 }
 
 .more-btn {
@@ -505,9 +554,25 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 }
 
 .about .bio {
-	margin: 0 0 22px;
+	margin: 0 0 18px;
 	color: var(--muted);
 	font-size: 16px;
+}
+
+.about-copy {
+	text-align: left;
+	color: var(--ink);
+	font-size: 14.5px;
+	line-height: 1.8;
+	margin: 0 0 22px;
+}
+
+.about-copy p {
+	margin: 0 0 0.9em;
+}
+
+.about-copy p:last-child {
+	margin-bottom: 0;
 }
 
 .about-links {

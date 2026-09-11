@@ -11,7 +11,7 @@ const { current = 'home' } = Astro.props;
 <header class="site-header">
 	<a class="brand" href="/">
 		<span class="brand-mark">{site.name}</span>
-		<span class="brand-en">mylife</span>
+		<span class="brand-en">{site.english}</span>
 	</a>
 	<nav class="nav" aria-label="站点">
 		<a href="/" aria-current={current === 'home' ? 'page' : undefined}>此刻</a>
@@ -24,7 +24,7 @@ const { current = 'home' } = Astro.props;
 			<button type="button" data-layout-btn="waterfall" aria-pressed="true">大图</button>
 		</div>
 		<a class="avatar" href="/about" aria-label="关于">
-			<img src="/avatar.svg" alt="" width="28" height="28" />
+			<img src="/avatar.png" alt="" width="28" height="28" />
 		</a>
 	</div>
 </header>
