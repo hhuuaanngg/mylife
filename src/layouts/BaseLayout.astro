@@ -3,7 +3,6 @@ import '../styles/global.css';
 import { site } from '../lib/site';
 import SiteHeader from '../components/SiteHeader.astro';
 import Lightbox from '../components/Lightbox.astro';
-import PostModal from '../components/PostModal.astro';
 
 interface Props {
 	title?: string;
@@ -40,7 +39,6 @@ const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.t
 		<slot />
 		<footer class="site-footer">{site.footer}</footer>
 		<Lightbox />
-		<PostModal />
 		<noscript>
 			<style>
 				img.lazy-img {
