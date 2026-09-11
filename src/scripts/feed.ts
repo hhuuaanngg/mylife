@@ -1,3 +1,5 @@
+import { setupMasonry } from './masonry';
+
 const LOAD_AHEAD = 720;
 
 type Hydrate = (posts: HTMLElement[]) => void;
@@ -9,7 +11,10 @@ function nearBottom(el: Element) {
 export function setupInfiniteFeed(hydrate: Hydrate) {
 	const feed = document.querySelector<HTMLElement>('[data-feed]');
 	const sentinel = document.querySelector<HTMLElement>('[data-infinite]');
-	if (!feed || !sentinel) return;
+	if (!feed) return;
+
+	const masonry = setupMasonry(feed);
+	if (!sentinel) return;
 
 	const status = sentinel.querySelector<HTMLElement>('[data-infinite-status]');
 	const bar = sentinel.querySelector<HTMLElement>('.feed-sentinel-bar');
@@ -51,13 +56,16 @@ export function setupInfiniteFeed(hydrate: Hydrate) {
 				const id = post.id;
 				if (id && feed.querySelector(`#${CSS.escape(id)}`)) continue;
 				const node = document.importNode(post, true);
-				feed.appendChild(node);
 				added.push(node);
+			}
+
+			if (added.length) {
+				masonry.append(added);
+				hydrate(added);
 			}
 
 			next = chunk?.getAttribute('data-next') || '';
 			sentinel.dataset.next = next;
-			if (added.length) hydrate(added);
 
 			if (!next) finish();
 			else setState('idle');

@@ -178,33 +178,54 @@ button {
 }
 
 .masonry {
-	columns: 1;
-	column-gap: 18px;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 18px;
+	align-items: start;
 }
 
 @media (min-width: 700px) {
 	.masonry {
-		columns: 2;
+		grid-template-columns: 1fr 1fr;
 	}
 }
 
 @media (min-width: 1080px) {
 	.masonry {
-		columns: 3;
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
 
+.masonry.is-packed {
+	display: flex;
+	align-items: flex-start;
+}
+
+.masonry-col {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
 .post {
-	break-inside: avoid;
-	page-break-inside: avoid;
-	display: inline-block;
+	display: block;
 	width: 100%;
-	margin: 0 0 18px;
+	margin: 0;
 	background: var(--card);
 	border: 1px solid var(--line);
 	border-radius: var(--radius);
 	box-shadow: var(--shadow);
 	overflow: hidden;
+	animation: rise 0.45s ease both;
+}
+
+.masonry.is-packed .post {
+	animation: none;
+}
+
+.masonry.is-packed .post.is-new {
 	animation: rise 0.45s ease both;
 }
 
