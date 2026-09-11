@@ -87,8 +87,11 @@ async function runPool(items: HTMLImageElement[], concurrency: number, priority:
 	);
 }
 
-export function setupLazyImages() {
-	const all = [...document.querySelectorAll<HTMLImageElement>('img.lazy-img[data-src]')];
+export function setupLazyImages(root: ParentNode | ParentNode[] = document) {
+	const scopes = Array.isArray(root) ? root : [root];
+	const all = scopes
+		.flatMap((scope) => [...scope.querySelectorAll<HTMLImageElement>('img.lazy-img[data-src]')])
+		.filter((img) => img.dataset.loaded !== '1' && img.dataset.loading !== '1');
 	if (!all.length) return;
 
 	const start = () => boot(all);

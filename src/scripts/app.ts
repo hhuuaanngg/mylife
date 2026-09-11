@@ -1,9 +1,13 @@
 import { setupLazyImages } from './images';
+import { setupInfiniteFeed } from './feed';
 
 const LIKES_KEY = 'cike-likes';
+const likes = readLikes();
 
-function setupExpand() {
-	document.querySelectorAll<HTMLElement>('[data-expand]').forEach((el) => {
+function setupExpand(root: ParentNode = document) {
+	root.querySelectorAll<HTMLElement>('[data-expand]').forEach((el) => {
+		if (el.dataset.bound === '1') return;
+		el.dataset.bound = '1';
 		const btn = el.parentElement?.querySelector<HTMLButtonElement>('[data-more]');
 		if (!btn) return;
 
@@ -26,10 +30,10 @@ function readLikes(): Set<string> {
 	}
 }
 
-function setupLikes() {
-	const likes = readLikes();
-
-	document.querySelectorAll<HTMLButtonElement>('[data-like]').forEach((btn) => {
+function setupLikes(root: ParentNode = document) {
+	root.querySelectorAll<HTMLButtonElement>('[data-like]').forEach((btn) => {
+		if (btn.dataset.bound === '1') return;
+		btn.dataset.bound = '1';
 		const id = btn.dataset.like;
 		if (!id) return;
 
@@ -157,7 +161,15 @@ function setupLightbox() {
 	});
 }
 
-setupLazyImages();
-setupExpand();
-setupLikes();
+function hydrate(root: ParentNode | ParentNode[] = document) {
+	const scopes = Array.isArray(root) ? root : [root];
+	for (const scope of scopes) {
+		setupExpand(scope);
+		setupLikes(scope);
+	}
+	setupLazyImages(root);
+}
+
+hydrate();
 setupLightbox();
+setupInfiniteFeed(hydrate);

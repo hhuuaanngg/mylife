@@ -39,16 +39,16 @@ export function paginate<T>(items: T[], page: number) {
 	};
 }
 
-export function pageHref(base: string, page: number) {
-	if (page <= 1) return base || '/';
-	return `${base}/page/${page}`;
+export function feedHref(base: string, page: number) {
+	const prefix = base || '';
+	return `${prefix}/feed/${page}`;
+}
+
+export function nextFeedHref(base: string, page: number, totalPages: number) {
+	if (page >= totalPages) return '';
+	return feedHref(base, page + 1);
 }
 
 export function postHref(id: string) {
 	return `/p/${id}`;
-}
-
-export function tagHref(tag: string, page = 1) {
-	const base = `/t/${encodeURIComponent(tag)}`;
-	return pageHref(base, page);
 }

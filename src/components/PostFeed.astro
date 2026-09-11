@@ -16,7 +16,7 @@ const items = await Promise.all(
 );
 ---
 
-<div class="masonry">
+<div class="masonry" data-feed>
 	{
 		items.map(({ post, Content }) => (
 			<PostCard post={post}>
