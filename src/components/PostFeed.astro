@@ -1,0 +1,27 @@
+---
+import { render } from 'astro:content';
+import PostCard from './PostCard.astro';
+import type { Post } from '../lib/posts';
+
+interface Props {
+	posts: Post[];
+}
+
+const { posts } = Astro.props;
+const items = await Promise.all(
+	posts.map(async (post) => {
+		const { Content } = await render(post);
+		return { post, Content };
+	}),
+);
+---
+
+<div class="masonry" data-feed>
+	{
+		items.map(({ post, Content }) => (
+			<PostCard post={post}>
+				<Content />
+			</PostCard>
+		))
+	}
+</div>

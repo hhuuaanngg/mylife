@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout title="关于" description={site.description} current="about">
+	<main class="wrap about">
+		<div class="about-avatar">
+			<img src="/avatar.png" alt={site.author} width="84" height="84" />
+		</div>
+		<h1>{site.name}</h1>
+		<p class="bio">ME MORE COOL，一条棉毛裤。{site.tagline}</p>
+		<div class="about-copy">
+			<p>
+				欢迎来到 memore.cool。这里有技术，有 AI，有生活，有摄影，也有一些暂时还没归类成功的想法。它不是一个标准答案库，更像是一份持续更新的个人记忆。
+			</p>
+			<p>
+				我是{site.author}，一位数码爱好者。座右铭是「态度决定一切」，也一直告诫自己要做自己。喜欢摄影、电影、音乐和旅行。
+			</p>
+			<p>如果你只是路过，看完之后觉得这个网站名字有点离谱但还挺有意思——那也算成功。</p>
+		</div>
+		<div class="about-links">
+			{site.links.map((link) => (
+				<a href={link.href}>{link.label}</a>
+			))}
+		</div>
+	</main>
+</BaseLayout>

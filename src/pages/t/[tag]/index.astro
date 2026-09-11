@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostFeed from '../../../components/PostFeed.astro';
+import FeedSentinel from '../../../components/FeedSentinel.astro';
+import { getAllTags, getPostsByTag, paginate, nextFeedHref } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+	const tags = await getAllTags();
+	return tags.map(({ tag }) => ({ params: { tag } }));
+}
+
+const { tag } = Astro.params;
+const all = await getPostsByTag(tag!);
+const { items, page, totalPages, total } = paginate(all, 1);
+const base = `/t/${encodeURIComponent(tag!)}`;
+const next = nextFeedHref(base, page, totalPages);
+---
+
+<BaseLayout title={`#${tag}`} current="tags">
+	<main class="wrap">
+		<div class="page-kicker">
+			<h1>#{tag}</h1>
+			<p>{total} 条</p>
+		</div>
+		<PostFeed posts={items} />
+		<FeedSentinel next={next} />
+	</main>
+</BaseLayout>

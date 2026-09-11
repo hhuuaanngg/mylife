@@ -1,0 +1,34 @@
+---
+import { render } from 'astro:content';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts, paginate, nextFeedHref } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	const { totalPages } = paginate(posts, 1);
+	return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => ({
+		params: { page: String(i + 2) },
+	}));
+}
+
+const pageNum = Number(Astro.params.page);
+const all = await getPosts();
+const { items, page, totalPages } = paginate(all, pageNum);
+const next = nextFeedHref('', page, totalPages);
+const rendered = await Promise.all(
+	items.map(async (post) => {
+		const { Content } = await render(post);
+		return { post, Content };
+	}),
+);
+---
+
+<div class="feed-chunk" data-next={next}>
+	{
+		rendered.map(({ post, Content }) => (
+			<PostCard post={post}>
+				<Content />
+			</PostCard>
+		))
+	}
+</div>

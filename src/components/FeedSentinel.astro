@@ -1,0 +1,16 @@
+---
+interface Props {
+	next: string;
+}
+
+const { next } = Astro.props;
+---
+
+{
+	next && (
+		<div class="feed-sentinel" data-infinite data-next={next} aria-live="polite">
+			<span class="feed-sentinel-bar" hidden></span>
+			<span class="feed-sentinel-msg" data-infinite-status hidden></span>
+		</div>
+	)
+}

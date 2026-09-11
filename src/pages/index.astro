@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostFeed from '../components/PostFeed.astro';
+import FeedSentinel from '../components/FeedSentinel.astro';
+import { getPosts, paginate, nextFeedHref } from '../lib/posts';
+import { site } from '../lib/site';
+
+const all = await getPosts();
+const { items, page, totalPages, total } = paginate(all, 1);
+const next = nextFeedHref('', page, totalPages);
+---
+
+<BaseLayout current="home">
+	<main class="wrap">
+		<div class="page-kicker">
+			<h1>{site.name}</h1>
+			<p>{total} 篇</p>
+		</div>
+		<PostFeed posts={items} />
+		<FeedSentinel next={next} />
+	</main>
+</BaseLayout>
