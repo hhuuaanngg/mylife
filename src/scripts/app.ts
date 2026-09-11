@@ -1,5 +1,6 @@
 import { setupLazyImages } from './images';
 import { setupInfiniteFeed } from './feed';
+import { setupPostModal } from './detail';
 
 const LIKES_KEY = 'cike-likes';
 const likes = readLikes();
@@ -56,21 +57,14 @@ function setupLikes(root: ParentNode = document) {
 
 type Photo = { src: string; alt: string };
 
-function collectGalleries() {
-	const galleries = new Map<string, Photo[]>();
-	document.querySelectorAll<HTMLElement>('[data-post-id]').forEach((post) => {
-		const id = post.dataset.postId;
-		if (!id) return;
-		const photos = [...post.querySelectorAll<HTMLButtonElement>('[data-lightbox]')].map((btn) => {
-			const img = btn.querySelector('img');
-			return {
-				src: btn.dataset.src || img?.dataset.src || img?.currentSrc || img?.getAttribute('src') || '',
-				alt: img?.getAttribute('alt') || '',
-			};
-		});
-		galleries.set(id, photos.filter((p) => p.src));
-	});
-	return galleries;
+function photosOf(root: ParentNode): Photo[] {
+	return [...root.querySelectorAll<HTMLButtonElement>('[data-lightbox]')].map((btn) => {
+		const img = btn.querySelector('img');
+		return {
+			src: btn.dataset.src || img?.dataset.src || img?.currentSrc || img?.getAttribute('src') || '',
+			alt: img?.getAttribute('alt') || '',
+		};
+	}).filter((photo) => photo.src);
 }
 
 function setupLightbox() {
@@ -84,15 +78,11 @@ function setupLightbox() {
 	const close = dialog.querySelector<HTMLButtonElement>('[data-lb-close]');
 	if (!img || !count || !prev || !next || !close) return;
 
-	const galleries = collectGalleries();
-	let postId = '';
+	let list: Photo[] = [];
 	let index = 0;
 	let startX = 0;
 
-	const photos = () => galleries.get(postId) ?? [];
-
 	const render = () => {
-		const list = photos();
 		const current = list[index];
 		if (!current) return;
 		img.src = current.src;
@@ -102,8 +92,8 @@ function setupLightbox() {
 		next.hidden = list.length < 2;
 	};
 
-	const open = (id: string, i: number) => {
-		postId = id;
+	const open = (photos: Photo[], i: number) => {
+		list = photos;
 		index = i;
 		render();
 		if (!dialog.open) dialog.showModal();
@@ -116,19 +106,22 @@ function setupLightbox() {
 	};
 
 	const step = (delta: number) => {
-		const list = photos();
 		if (list.length < 2) return;
 		index = (index + delta + list.length) % list.length;
 		render();
 	};
 
-	document.querySelectorAll<HTMLButtonElement>('[data-lightbox]').forEach((btn) => {
-		btn.addEventListener('click', () => {
-			const id = btn.dataset.post;
-			const i = Number(btn.dataset.index || 0);
-			if (!id) return;
-			open(id, i);
-		});
+	document.addEventListener('click', (event) => {
+		if (!(event.target instanceof Element)) return;
+		const btn = event.target.closest('[data-lightbox]');
+		if (!(btn instanceof HTMLElement)) return;
+		if (btn.closest('.lightbox')) return;
+		const root = btn.closest('[data-post-id]') ?? btn.parentElement;
+		if (!root) return;
+		const photos = photosOf(root);
+		const i = Number(btn.dataset.index || 0);
+		if (!photos.length) return;
+		open(photos, Number.isFinite(i) ? i : 0);
 	});
 
 	prev.addEventListener('click', () => step(-1));
@@ -172,4 +165,5 @@ function hydrate(root: ParentNode | ParentNode[] = document) {
 
 hydrate();
 setupLightbox();
+setupPostModal(hydrate);
 setupInfiniteFeed(hydrate);

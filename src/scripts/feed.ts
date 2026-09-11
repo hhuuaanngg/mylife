@@ -39,6 +39,9 @@ export function setupInfiniteFeed(hydrate: Hydrate) {
 
 	const loadMore = async () => {
 		if (loading || !next) return;
+		if (document.body.classList.contains('post-modal-open') || document.body.classList.contains('lb-open')) {
+			return;
+		}
 		loading = true;
 		setState('loading', '加载中…');
 		const url = next;
@@ -79,6 +82,7 @@ export function setupInfiniteFeed(hydrate: Hydrate) {
 
 	const observer = new IntersectionObserver(
 		(entries) => {
+			if (document.body.classList.contains('post-modal-open')) return;
 			if (entries.some((entry) => entry.isIntersecting)) void loadMore();
 		},
 		{ rootMargin: `${LOAD_AHEAD}px 0px`, threshold: 0 },
@@ -90,4 +94,8 @@ export function setupInfiniteFeed(hydrate: Hydrate) {
 
 	observer.observe(sentinel);
 	if (nearBottom(sentinel)) void loadMore();
+
+	document.querySelector('#post-modal')?.addEventListener('close', () => {
+		if (next && nearBottom(sentinel)) void loadMore();
+	});
 }
