@@ -1,6 +1,5 @@
 import { setupLazyImages } from './images';
 import { setupInfiniteFeed } from './feed';
-import { setupPostModal } from './detail';
 
 const LIKES_KEY = 'cike-likes';
 const likes = readLikes();
@@ -165,5 +164,4 @@ function hydrate(root: ParentNode | ParentNode[] = document) {
 
 hydrate();
 setupLightbox();
-setupPostModal(hydrate);
 setupInfiniteFeed(hydrate);
