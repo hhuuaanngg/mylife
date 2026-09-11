@@ -39,6 +39,19 @@ const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.t
 		<slot />
 		<footer class="site-footer">{site.footer}</footer>
 		<Lightbox />
+		<noscript>
+			<style>
+				img.lazy-img {
+					display: none;
+				}
+				.photo-cell.is-waiting,
+				.article-photo.is-waiting {
+					animation: none;
+					background-image: none;
+					aspect-ratio: auto;
+				}
+			</style>
+		</noscript>
 		<script src="../scripts/app.ts"></script>
 	</body>
 </html>

@@ -19,8 +19,11 @@ const extra = photos.length - 9;
 		preview.length > 0 && (
 			<a class="photo-grid" href={href} data-count={preview.length}>
 				{preview.map((src, index) => (
-					<span class="photo-cell">
-						<img src={src} alt={`${title} ${index + 1}`} loading="lazy" />
+					<span class="photo-cell is-waiting" aria-busy="true">
+						<img class="lazy-img" data-src={src} alt={`${title} ${index + 1}`} />
+						<noscript>
+							<img src={src} alt={`${title} ${index + 1}`} />
+						</noscript>
 						{index === 8 && extra > 0 && <span class="photo-overflow">+{extra}</span>}
 					</span>
 				))}

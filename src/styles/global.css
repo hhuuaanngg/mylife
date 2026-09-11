@@ -263,11 +263,16 @@ button {
 	min-height: 0;
 }
 
-.photo-grid[data-count='1'] .photo-cell {
+.photo-grid[data-count='1'] .photo-cell.is-waiting {
+	aspect-ratio: 4 / 3;
+}
+
+.photo-grid[data-count='1'] .photo-cell.is-loaded {
 	background: transparent;
 }
 
-.photo-grid[data-count='1'] img {
+.photo-grid[data-count='1'] .photo-cell.is-loaded img {
+	position: static;
 	width: 100%;
 	height: auto;
 	object-fit: contain;
@@ -282,17 +287,23 @@ button {
 	height: 100%;
 }
 
-.photo-grid:not([data-count='1']) .photo-cell img {
+.photo-grid:not([data-count='1']) .photo-cell img,
+.photo-grid[data-count='1'] .photo-cell.is-waiting img {
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
+	max-width: none;
 	object-fit: cover;
 }
 
 .photo-cell img {
-	transition: transform 0.45s ease;
+	transition:
+		transform 0.45s ease,
+		opacity 0.28s ease;
 }
 
-.photo-cell:hover img {
+.photo-cell:hover img.is-ready {
 	transform: scale(1.035);
 }
 
@@ -306,6 +317,45 @@ button {
 	font-family: var(--serif);
 	font-size: 28px;
 	letter-spacing: 0.04em;
+	z-index: 1;
+}
+
+.lazy-img {
+	opacity: 0;
+}
+
+.lazy-img.is-ready {
+	opacity: 1;
+}
+
+@keyframes photo-shimmer {
+	0% {
+		background-position: 100% 0;
+	}
+	100% {
+		background-position: -100% 0;
+	}
+}
+
+.photo-cell.is-waiting,
+.article-photo.is-waiting {
+	background-color: #e4dfd6;
+	background-image: linear-gradient(90deg, #e4dfd6 0%, #f6f3ec 42%, #e4dfd6 84%);
+	background-size: 220% 100%;
+	animation: photo-shimmer 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.photo-cell.is-waiting,
+	.article-photo.is-waiting {
+		animation: none;
+		background-image: none;
+	}
+
+	.lazy-img,
+	.photo-cell img {
+		transition: none;
+	}
 }
 
 .post-video {
@@ -391,14 +441,36 @@ button {
 }
 
 .article-photo {
+	position: relative;
 	display: block;
 	width: 100%;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
 	background: #d8d3c8;
+	cursor: zoom-in;
+}
+
+.article-photo.is-waiting {
+	aspect-ratio: 3 / 2;
+}
+
+.article-photo.is-waiting img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+}
+
+.article-photo.is-loaded img {
+	width: 100%;
+	height: auto;
 }
 
 .article-photo img {
-	width: 100%;
-	height: auto;
+	transition: opacity 0.28s ease;
 }
 
 .article-video {

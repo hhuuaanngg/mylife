@@ -38,14 +38,19 @@ const { title, date, tags, photos, video } = post.data;
 				<div class="article-photos">
 					{photos.map((src, index) => (
 						<button
-							class="article-photo"
+							class="article-photo is-waiting"
 							type="button"
 							data-lightbox
+							data-src={src}
 							data-post={post.id}
 							data-index={index}
+							aria-busy="true"
 							aria-label={`查看第 ${index + 1} 张`}
 						>
-							<img src={src} alt={`${title} ${index + 1}`} loading="lazy" />
+							<img class="lazy-img" data-src={src} alt={`${title} ${index + 1}`} />
+							<noscript>
+								<img src={src} alt={`${title} ${index + 1}`} />
+							</noscript>
 						</button>
 					))}
 				</div>

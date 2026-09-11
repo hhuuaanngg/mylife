@@ -1,3 +1,5 @@
+import { setupLazyImages } from './images';
+
 const LIKES_KEY = 'cike-likes';
 
 function setupExpand() {
@@ -58,7 +60,7 @@ function collectGalleries() {
 		const photos = [...post.querySelectorAll<HTMLButtonElement>('[data-lightbox]')].map((btn) => {
 			const img = btn.querySelector('img');
 			return {
-				src: img?.getAttribute('src') || '',
+				src: btn.dataset.src || img?.dataset.src || img?.currentSrc || img?.getAttribute('src') || '',
 				alt: img?.getAttribute('alt') || '',
 			};
 		});
@@ -155,6 +157,7 @@ function setupLightbox() {
 	});
 }
 
+setupLazyImages();
 setupExpand();
 setupLikes();
 setupLightbox();
