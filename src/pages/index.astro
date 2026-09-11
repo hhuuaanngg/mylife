@@ -1,18 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostFeed from '../components/PostFeed.astro';
-import { getPosts } from '../lib/posts';
+import Pager from '../components/Pager.astro';
+import { getPosts, paginate } from '../lib/posts';
 import { site } from '../lib/site';
 
-const posts = await getPosts();
+const all = await getPosts();
+const { items, page, totalPages, total } = paginate(all, 1);
 ---
 
 <BaseLayout current="home">
 	<main class="wrap">
 		<div class="page-kicker">
 			<h1>{site.name}</h1>
-			<p>{site.tagline}</p>
+			<p>{total} 篇</p>
 		</div>
-		<PostFeed posts={posts} />
+		<PostFeed posts={items} />
+		<Pager page={page} totalPages={totalPages} />
 	</main>
 </BaseLayout>

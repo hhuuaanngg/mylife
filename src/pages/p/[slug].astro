@@ -1,0 +1,65 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/site';
+import { getPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, tags, photos, video } = post.data;
+---
+
+<BaseLayout title={title} description={title}>
+	<main class="wrap article" data-post-id={post.id}>
+		<p class="article-back">
+			<a href="/">← 返回瀑布流</a>
+		</p>
+		<h1 class="article-title">{title}</h1>
+		<p class="article-meta">
+			<time datetime={date.toISOString()}>{formatDate(date)}</time>
+			{
+				tags.map((tag) => (
+					<a class="tag" href={`/t/${encodeURIComponent(tag)}`}>
+						#{tag}
+					</a>
+				))
+			}
+		</p>
+		{
+			photos.length > 0 && (
+				<div class="article-photos">
+					{photos.map((src, index) => (
+						<button
+							class="article-photo"
+							type="button"
+							data-lightbox
+							data-post={post.id}
+							data-index={index}
+							aria-label={`查看第 ${index + 1} 张`}
+						>
+							<img src={src} alt={`${title} ${index + 1}`} loading="lazy" />
+						</button>
+					))}
+				</div>
+			)
+		}
+		{
+			video && (
+				<video class="article-video" controls preload="metadata" src={video}>
+					<a href={video}>播放视频</a>
+				</video>
+			)
+		}
+		<div class="article-body">
+			<Content />
+		</div>
+	</main>
+</BaseLayout>

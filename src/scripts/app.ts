@@ -1,30 +1,4 @@
-const LAYOUT_KEY = 'cike-photo-layout';
 const LIKES_KEY = 'cike-likes';
-
-type LayoutMode = 'grid' | 'waterfall';
-
-function getLayout(): LayoutMode {
-	const saved = localStorage.getItem(LAYOUT_KEY);
-	return saved === 'grid' || saved === 'waterfall' ? saved : 'waterfall';
-}
-
-function applyLayout(mode: LayoutMode) {
-	document.documentElement.dataset.photoLayout = mode;
-	localStorage.setItem(LAYOUT_KEY, mode);
-	document.querySelectorAll<HTMLButtonElement>('[data-layout-btn]').forEach((btn) => {
-		btn.setAttribute('aria-pressed', String(btn.dataset.layoutBtn === mode));
-	});
-}
-
-function setupLayoutSwitch() {
-	applyLayout(getLayout());
-	document.querySelectorAll<HTMLButtonElement>('[data-layout-btn]').forEach((btn) => {
-		btn.addEventListener('click', () => {
-			const mode = btn.dataset.layoutBtn === 'grid' ? 'grid' : 'waterfall';
-			applyLayout(mode);
-		});
-	});
-}
 
 function setupExpand() {
 	document.querySelectorAll<HTMLElement>('[data-expand]').forEach((el) => {
@@ -181,14 +155,6 @@ function setupLightbox() {
 	});
 }
 
-function scrollToHash() {
-	if (!location.hash) return;
-	const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-	el?.scrollIntoView({ block: 'start' });
-}
-
-setupLayoutSwitch();
 setupExpand();
 setupLikes();
 setupLightbox();
-scrollToHash();

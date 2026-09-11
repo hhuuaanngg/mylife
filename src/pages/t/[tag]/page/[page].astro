@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PostFeed from '../../../../components/PostFeed.astro';
+import Pager from '../../../../components/Pager.astro';
+import { getAllTags, getPostsByTag, paginate } from '../../../../lib/posts';
+
+export async function getStaticPaths() {
+	const tags = await getAllTags();
+	const paths = [];
+	for (const { tag } of tags) {
+		const posts = await getPostsByTag(tag);
+		const { totalPages } = paginate(posts, 1);
+		for (let n = 2; n <= totalPages; n++) {
+			paths.push({ params: { tag, page: String(n) } });
+		}
+	}
+	return paths;
+}
+
+const { tag, page: pageParam } = Astro.params;
+const all = await getPostsByTag(tag!);
+const { items, page, totalPages, total } = paginate(all, Number(pageParam));
+const base = `/t/${encodeURIComponent(tag!)}`;
+---
+
+<BaseLayout title={`#${tag} · 第 ${page} 页`} current="tags">
+	<main class="wrap">
+		<div class="page-kicker">
+			<h1>#{tag}</h1>
+			<p>
+				{total} 条 · 第 {page} 页
+			</p>
+		</div>
+		<PostFeed posts={items} />
+		<Pager page={page} totalPages={totalPages} base={base} />
+	</main>
+</BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import { formatDate } from '../lib/site';
+import { postHref } from '../lib/posts';
 import type { Post } from '../lib/posts';
 
 interface Props {
@@ -8,39 +9,35 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, date, tags, photos } = post.data;
-const shownCount = Math.min(photos.length, 9);
+const href = postHref(post.id);
+const preview = photos.slice(0, 9);
 const extra = photos.length - 9;
 ---
 
 <article class="post" id={post.id} data-post-id={post.id}>
 	{
-		photos.length > 0 && (
-			<div class="photo-grid" data-count={shownCount}>
-				{photos.map((src, index) => (
-					<button
-						class="photo-cell"
-						type="button"
-						data-lightbox
-						data-post={post.id}
-						data-index={index}
-						aria-label={`查看「${title}」第 ${index + 1} 张`}
-					>
+		preview.length > 0 && (
+			<a class="photo-grid" href={href} data-count={preview.length}>
+				{preview.map((src, index) => (
+					<span class="photo-cell">
 						<img src={src} alt={`${title} ${index + 1}`} loading="lazy" />
 						{index === 8 && extra > 0 && <span class="photo-overflow">+{extra}</span>}
-					</button>
+					</span>
 				))}
-			</div>
+			</a>
 		)
 	}
 	{
 		post.data.video && (
-			<video class="post-video" controls preload="metadata" src={post.data.video}>
-				<a href={post.data.video}>播放视频</a>
-			</video>
+			<a class="post-video-link" href={href} aria-label={`观看「${title}」`}>
+				<video class="post-video" muted playsinline preload="metadata" src={post.data.video}></video>
+			</a>
 		)
 	}
 	<div class="post-body">
-		<h2 class="post-title">{title}</h2>
+		<h2 class="post-title">
+			<a href={href}>{title}</a>
+		</h2>
 		<div class="post-text" data-expand>
 			<slot />
 		</div>

@@ -1,0 +1,35 @@
+---
+import { pageHref } from '../lib/posts';
+
+interface Props {
+	page: number;
+	totalPages: number;
+	base?: string;
+}
+
+const { page, totalPages, base = '' } = Astro.props;
+---
+
+{
+	totalPages > 1 && (
+		<nav class="pager" aria-label="分页">
+			{page > 1 ? (
+				<a href={pageHref(base, page - 1)} rel="prev">
+					上一页
+				</a>
+			) : (
+				<span class="pager-disabled">上一页</span>
+			)}
+			<span class="pager-status">
+				{page} / {totalPages}
+			</span>
+			{page < totalPages ? (
+				<a href={pageHref(base, page + 1)} rel="next">
+					下一页
+				</a>
+			) : (
+				<span class="pager-disabled">下一页</span>
+			)}
+		</nav>
+	)
+}
