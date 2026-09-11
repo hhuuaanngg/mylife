@@ -479,6 +479,7 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 .about {
 	max-width: 560px;
 	padding-top: 28px;
+	text-align: center;
 }
 
 .about-avatar {
@@ -487,7 +488,7 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 	border-radius: 50%;
 	overflow: hidden;
 	border: 1px solid var(--line);
-	margin-bottom: 18px;
+	margin: 0 auto 18px;
 }
 
 .about-avatar img {
@@ -512,6 +513,7 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 .about-links {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: center;
 	gap: 8px;
 }
 
@@ -539,11 +541,12 @@ html[data-photo-layout='waterfall'] .photo-overflow {
 .lightbox {
 	border: 0;
 	padding: 0;
-	background: transparent;
+	background: rgba(12, 11, 10, 0.94);
 	max-width: none;
 	width: 100vw;
 	height: 100vh;
 	margin: 0;
+	color: #fff;
 }
 
 .lightbox::backdrop {
@@ -629,6 +632,24 @@ body.lb-open {
 @media (max-width: 699px) {
 	.brand-en {
 		display: none;
+	}
+
+	.site-header {
+		padding: 0 10px;
+		gap: 8px;
+	}
+
+	.nav {
+		gap: 10px;
+		font-size: 12px;
+	}
+
+	.page-kicker h1 {
+		display: none;
+	}
+
+	.page-kicker {
+		margin-bottom: 10px;
 	}
 
 	.layout-switch button {
