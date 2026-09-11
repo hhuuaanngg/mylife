@@ -15,8 +15,9 @@ export function setupPostModal(hydrate: Hydrate) {
 	const body = dialog.querySelector<HTMLElement>('[data-post-modal-body]');
 	const loading = dialog.querySelector<HTMLElement>('[data-post-modal-loading]');
 	const closer = dialog.querySelector<HTMLButtonElement>('[data-post-modal-close]');
+	const scrim = document.querySelector<HTMLElement>('[data-post-modal-scrim]');
 	const lightbox = document.querySelector<HTMLDialogElement>('#lightbox');
-	if (!body || !closer) return;
+	if (!body || !closer || !scrim) return;
 
 	const cache = new Map<string, string>();
 	const homeTitle = document.title;
@@ -44,6 +45,7 @@ export function setupPostModal(hydrate: Hydrate) {
 		pauseVideos();
 		token += 1;
 		body.replaceChildren();
+		scrim.hidden = true;
 		document.body.classList.remove('post-modal-open');
 		document.title = homeTitle;
 		if (pushed && !closingByPop) {
@@ -70,7 +72,11 @@ export function setupPostModal(hydrate: Hydrate) {
 	const open = async (href: string) => {
 		const path = postPath(href);
 		const my = ++token;
-		if (!dialog.open) dialog.showModal();
+		if (!dialog.open) {
+			dialog.show();
+			closer.focus();
+		}
+		scrim.hidden = false;
 		document.body.classList.add('post-modal-open');
 		setLoading(true);
 
@@ -115,13 +121,13 @@ export function setupPostModal(hydrate: Hydrate) {
 	});
 
 	closer.addEventListener('click', hide);
+	scrim.addEventListener('click', hide);
 
-	dialog.addEventListener('click', (event) => {
-		if (event.target === dialog) hide();
-	});
-
-	dialog.addEventListener('cancel', (event) => {
-		if (lightbox?.open) event.preventDefault();
+	window.addEventListener('keydown', (event) => {
+		if (event.key !== 'Escape' || !dialog.open) return;
+		if (lightbox?.open) return;
+		event.preventDefault();
+		hide();
 	});
 
 	dialog.addEventListener('close', syncClosed);
